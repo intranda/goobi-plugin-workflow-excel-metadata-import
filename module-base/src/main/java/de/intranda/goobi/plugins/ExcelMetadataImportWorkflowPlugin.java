@@ -11,10 +11,10 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
 @Log4j2
-public class KickStartWorkflowPlugin implements IWorkflowPlugin, IPlugin {
+public class ExcelMetadataImportWorkflowPlugin implements IWorkflowPlugin, IPlugin {
     
     @Getter
-    private String title = "intranda_workflow_kick_start";
+    private String title = "intranda_workflow_excel_metadata_import";
         
     @Getter
     private String value;
@@ -26,14 +26,14 @@ public class KickStartWorkflowPlugin implements IWorkflowPlugin, IPlugin {
 
     @Override
     public String getGui() {
-        return "/uii/plugin_workflow_kick_start.xhtml";
+        return "/uii/plugin_workflow_excel_metadata_import.xhtml";
     }
 
     /**
      * Constructor
      */
-    public KickStartWorkflowPlugin() {
-        log.info("KickStart workflow plugin started");
+    public ExcelMetadataImportWorkflowPlugin() {
+        log.info("ExcelMetadataImport workflow plugin started");
         value = ConfigPlugins.getPluginConfig(title).getString("value", "default value");
     }
 }

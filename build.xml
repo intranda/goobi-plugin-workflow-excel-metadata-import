@@ -5,8 +5,8 @@
 		<exec executable="mvn">
 			<arg value="package"/>
 		</exec>
-		<copy file="module-base/target/plugin-workflow-kick-start-base.jar" todir="/opt/digiverso/goobi/plugins/workflow/" overwrite="true"/>
-		<copy file="module-gui/target/plugin-workflow-kick-start-gui.jar" todir="/opt/digiverso/goobi/plugins/GUI/" overwrite="true"/>
+		<copy file="module-base/target/plugin-workflow-excel-metadata-import-base.jar" todir="/opt/digiverso/goobi/plugins/workflow/" overwrite="true"/>
+		<copy file="module-gui/target/plugin-workflow-excel-metadata-import-gui.jar" todir="/opt/digiverso/goobi/plugins/GUI/" overwrite="true"/>
 	</target>
 
 </project>

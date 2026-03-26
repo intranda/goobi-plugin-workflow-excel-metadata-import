@@ -13,15 +13,15 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<h:panelGroup
-					rendered="#{!LoginForm.hasRole('Plugin_workflow_kick_start')}"
+					rendered="#{!LoginForm.hasRole('Plugin_workflow_excel_metadata_import')}"
 					styleClass="color-box bg-hot text-white d-flex flex-row p-3">
 					<h:outputText
 						styleClass="fw-bold"
-						value="#{msgs.plugin_administration_missingPermission} Plugin_workflow_kick_start" />
+						value="#{msgs.plugin_administration_missingPermission} Plugin_workflow_excel_metadata_import" />
 				</h:panelGroup>
 				
 				<ui:fragment
-					rendered="#{LoginForm.hasRole('Plugin_workflow_kick_start')}">
+					rendered="#{LoginForm.hasRole('Plugin_workflow_excel_metadata_import')}">
 					<section:section type="neutral">
 						<section:header
 							icon="plug"
