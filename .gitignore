@@ -8,6 +8,10 @@ target/
 bin/
 build/
 node_modules/
+.flattened-pom.xml
+module-base/.flattened-pom.xml
+module-gui/.flattened-pom.xml
+
 
 # Eclipse
 .project
