@@ -1,6 +1,14 @@
 <config_plugin>
-	
-	<!-- configuration item as sample -->
-	<value>sample value from config</value>
-	
+
+    <!-- possible names for the process id column -->
+    <processIdField>VorgangsID</processIdField>
+    <processIdField>Vorgang-ID</processIdField>
+    <processIdField>ID</processIdField>
+    <processIdField>Processid</processIdField>
+
+    <!-- possible names for the process title column -->
+    <processTitleField>Vorgangstitel</processTitleField>
+    <processTitleField>process title</processTitleField>
+    <processTitleField>processtitle</processTitleField>
+    <processTitleField>Title</processTitleField>    
 </config_plugin>
