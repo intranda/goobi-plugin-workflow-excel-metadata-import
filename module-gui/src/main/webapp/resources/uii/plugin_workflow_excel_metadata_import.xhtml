@@ -46,7 +46,7 @@
                                             styleClass="ms-auto">
                                             <p:validateFile
                                                 sizeLimit="1000000000000"
-                                                allowTypes="/(\.|\/)(xlsx?|ods)$/" />
+                                                allowTypes="/(\.|\/)(xlsx?)$/" />
                                         </p:fileUpload>
                                     </div>
                                     <div class="col-sm-6">
@@ -89,12 +89,16 @@
                             enctype="multipart/form-data">
                             <section:header
                                 icon="plug"
-                                title="#{msgs[NavigationForm.workflowPlugin.title]}" />
+                                title="#{msgs.plugin_workflow_excel_metadata_import_mapping}" />
                             <section:body
                                 padding="true"
                                 id="section-body">
                                 <div class="row">
                                     <div class="col-sm-12">
+                                        <h:outputText
+                                            rendered="#{NavigationForm.workflowPlugin.rowsToImport !=null}"
+                                            value="#{msgs.plugin_workflow_excel_metadata_import_lines}: #{NavigationForm.workflowPlugin.rowsToImport.size()} " />
+
                                         <h:dataTable
                                             id="headerAssignment"
                                             rendered="#{NavigationForm.workflowPlugin.headerOrder.size() gt 0}"
@@ -117,21 +121,54 @@
 
                                             <h:column>
                                                 <f:facet name="header">
-                                                    <h:outputText value="#{msgs.vocabularyManager_excelImport_vocabularyField}" />
+                                                    <h:outputText value="#{msgs.plugin_workflow_excel_metadata_import_metadataName}" />
                                                 </f:facet>
                                                 <h:selectOneMenu
                                                     styleClass="form-control"
-                                                    value="#{column.assignedField}">
+                                                    value="#{column.assignedField}"
+                                                    required="false">
+                                                    <f:selectItem
+                                                        value="#{null}"
+                                                        label="#{msgs.pleaseSelect}" />
                                                     <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
                                                     <f:ajax
                                                         execute="@this"
-                                                        render=":headerAssignment" />
+                                                        render="tableSection:tableForm:headerAssignment" />
                                                 </h:selectOneMenu>
+                                            </h:column>
+
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="#{msgs.plugin_workflow_excel_metadata_import_replaceExistingData}" />
+                                                </f:facet>
+                                                <p:selectOneRadio
+                                                    value="#{column.replaceExistingData}"
+                                                    layout="lineDirection">
+                                                    <f:selectItem
+                                                        itemValue="#{false}"
+                                                        itemLabel="#{msgs.plugin_workflow_excel_metadata_import_add}" />
+                                                    <f:selectItem
+                                                        itemValue="#{true}"
+                                                        itemLabel="#{msgs.plugin_workflow_excel_metadata_import_replace}" />
+                                                    <f:ajax
+                                                        execute="@this"
+                                                        render="tableSection:tableForm:headerAssignment" />
+                                                </p:selectOneRadio>
                                             </h:column>
                                         </h:dataTable>
                                     </div>
                                 </div>
                             </section:body>
+                            <section:footer>
+                                <button:row>
+                                    <h:commandButton
+                                        rendered="#{NavigationForm.workflowPlugin.headerOrder.size() gt 0}"
+                                        styleClass="btn btn-primary"
+                                        value="#{msgs.plugin_workflow_excel_metadata_import_startImport}"
+                                        action="#{NavigationForm.workflowPlugin.importData}">
+                                    </h:commandButton>
+                                </button:row>
+                            </section:footer>
                         </h:form>
 
                     </section:section>
