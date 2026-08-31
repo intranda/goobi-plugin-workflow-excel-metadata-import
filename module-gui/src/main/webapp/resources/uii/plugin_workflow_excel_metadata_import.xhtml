@@ -7,136 +7,126 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
     xmlns:util="http://goobi.io/util">
-    <h:panelGroup>
-        <h:panelGroup
-            rendered="#{!LoginForm.hasRole('Plugin_workflow_excel_metadata_import')}"
-            styleClass="color-box bg-hot text-white d-flex flex-row p-3">
-            <h:outputText
-                styleClass="fw-bold"
-                value="#{msgs.plugin_administration_missingPermission} Plugin_workflow_excel_metadata_import" />
-        </h:panelGroup>
+    <util:missing-rights rights="Plugin_workflow_excel_metadata_import">
+        <intranda:box
+            id="uploadBox"
+            boxType="action"
+            boxPadding="true"
+            icon="plug"
+            title="#{msgs[NavigationForm.workflowPlugin.title]}">
 
-        <ui:fragment rendered="#{LoginForm.hasRole('Plugin_workflow_excel_metadata_import')}">
-            <intranda:box
-                id="uploadBox"
-                boxType="action"
-                boxPadding="true"
-                icon="plug"
-                title="#{msgs[NavigationForm.workflowPlugin.title]}">
+            <h:form
+                id="mainForm"
+                styleClass="d-flex flex-column"
+                enctype="multipart/form-data"
+                prependId="false">
 
-                <h:form
-                    id="mainForm"
-                    styleClass="d-flex flex-column"
-                    enctype="multipart/form-data"
-                    prependId="false">
+                <ui:fragment rendered="#{NavigationForm.workflowPlugin.excelFile == null}">
+                    <div class="draganddroparea m-2 align-self-auto">
+                        <p:fileUpload
+                            listener="#{NavigationForm.workflowPlugin.uploadFile}"
+                            id="excelUpload"
+                            auto="true"
+                            mode="advanced"
+                            dragDropSupport="true"
+                            previewWidth="0"
+                            label="#{msgs.plugin_massupload_selectFiles}"
+                            sizeLimit="1000000000000"
+                            allowTypes="/(\.|\/)(xlsx?)$/"
+                            update="mainForm" />
+                    </div>
+                </ui:fragment>
 
-                    <ui:fragment rendered="#{NavigationForm.workflowPlugin.excelFile == null}">
-                        <div class="draganddroparea m-2 align-self-auto">
-                            <p:fileUpload
-                                listener="#{NavigationForm.workflowPlugin.uploadFile}"
-                                id="excelUpload"
-                                auto="true"
-                                mode="advanced"
-                                dragDropSupport="true"
-                                previewWidth="0"
-                                label="#{msgs.plugin_massupload_selectFiles}"
-                                sizeLimit="1000000000000"
-                                allowTypes="/(\.|\/)(xlsx?)$/"
-                                update="mainForm" />
-                        </div>
-                    </ui:fragment>
-
-                    <ui:fragment rendered="#{NavigationForm.workflowPlugin.excelFile != null}">
-                        <div class="d-flex align-items-center justify-content-between p-2 mb-3 bg-light rounded">
-                            <h:outputText
-                                value="#{NavigationForm.workflowPlugin.excelFile.fileName} · #{NavigationForm.workflowPlugin.rowsToImport.size()} #{msgs.plugin_workflow_excel_metadata_import_lines}" />
-                            <button
-                                class="btn btn-icon"
-                                jsf:action="#{NavigationForm.workflowPlugin.cancelUpload()}"
-                                title="#{msgs.abbrechen}">
-                                <util:icon icon="x" />
-                                <f:ajax execute="@this" render="mainForm" />
-                            </button>
-                        </div>
-
-                        <div class="gw-table">
-                            <div class="gw-table__wrapper">
-                                <h:dataTable
-                                    id="headerAssignment"
-                                    rendered="#{NavigationForm.workflowPlugin.headerOrder.size() gt 0}"
-                                    styleClass="table table-bordered table-hover align-middle"
-                                    var="column"
-                                    value="#{NavigationForm.workflowPlugin.headerOrder}">
-
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="#{msgs.vocabularyManager_excelImport_columnName}" />
-                                        </f:facet>
-                                        <h:outputText value="#{column.columnHeader}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="#{msgs.vocabularyManager_excelImport_columnLetter}" />
-                                        </f:facet>
-                                        <h:outputText value="#{column.columnLetter}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="#{msgs.plugin_workflow_excel_metadata_import_metadataName}" />
-                                        </f:facet>
-                                        <h:selectOneMenu
-                                            styleClass="form-select"
-                                            value="#{column.assignedField}">
-                                            <f:selectItem
-                                                itemValue="#{null}"
-                                                itemLabel="#{msgs.pleaseSelect}" />
-                                            <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
-                                            <f:ajax
-                                                execute="@this"
-                                                render="headerAssignment" />
-                                        </h:selectOneMenu>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="#{msgs.plugin_workflow_excel_metadata_import_replaceExistingData}" />
-                                        </f:facet>
-                                        <h:selectOneRadio
-                                            value="#{column.replaceExistingData}"
-                                            styleClass="select-radio select-radio-horizontal">
-                                            <f:selectItem
-                                                itemValue="#{false}"
-                                                itemLabel="#{msgs.plugin_workflow_excel_metadata_import_add}" />
-                                            <f:selectItem
-                                                itemValue="#{true}"
-                                                itemLabel="#{msgs.plugin_workflow_excel_metadata_import_replace}" />
-                                            <f:ajax
-                                                execute="@this"
-                                                render="headerAssignment" />
-                                        </h:selectOneRadio>
-                                    </h:column>
-                                </h:dataTable>
-                            </div>
-                        </div>
-                    </ui:fragment>
-
-                    <div class="box__actions">
-                        <h:commandLink
-                            rendered="#{NavigationForm.workflowPlugin.excelFile != null}"
-                            styleClass="btn btn-blank"
-                            action="#{NavigationForm.workflowPlugin.cancelUpload()}">
-                            <h:outputText value="#{msgs.abbrechen}" />
+                <ui:fragment rendered="#{NavigationForm.workflowPlugin.excelFile != null}">
+                    <div class="d-flex align-items-center justify-content-between p-2 mb-3 bg-light rounded">
+                        <h:outputText
+                            value="#{NavigationForm.workflowPlugin.excelFile.fileName} · #{NavigationForm.workflowPlugin.rowsToImport.size()} #{msgs.plugin_workflow_excel_metadata_import_lines}" />
+                        <button
+                            class="btn btn-icon"
+                            jsf:action="#{NavigationForm.workflowPlugin.cancelUpload()}"
+                            title="#{msgs.abbrechen}">
+                            <util:icon icon="x" />
                             <f:ajax execute="@this" render="mainForm" />
-                        </h:commandLink>
-                        <h:commandLink
-                            rendered="#{NavigationForm.workflowPlugin.headerOrder.size() gt 0}"
-                            styleClass="btn btn-primary"
-                            action="#{NavigationForm.workflowPlugin.importData}">
-                            <h:outputText value="#{msgs.plugin_workflow_excel_metadata_import_startImport}" />
-                        </h:commandLink>
+                        </button>
                     </div>
 
-                </h:form>
-            </intranda:box>
-        </ui:fragment>
-    </h:panelGroup>
+                    <div class="gw-table">
+                        <div class="gw-table__wrapper">
+                            <h:dataTable
+                                id="headerAssignment"
+                                rendered="#{NavigationForm.workflowPlugin.headerOrder.size() gt 0}"
+                                styleClass="table table-bordered table-hover align-middle"
+                                var="column"
+                                value="#{NavigationForm.workflowPlugin.headerOrder}">
+
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msgs.vocabularyManager_excelImport_columnName}" />
+                                    </f:facet>
+                                    <h:outputText value="#{column.columnHeader}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msgs.vocabularyManager_excelImport_columnLetter}" />
+                                    </f:facet>
+                                    <h:outputText value="#{column.columnLetter}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msgs.plugin_workflow_excel_metadata_import_metadataName}" />
+                                    </f:facet>
+                                    <h:selectOneMenu
+                                        styleClass="form-select"
+                                        value="#{column.assignedField}">
+                                        <f:selectItem
+                                            itemValue="#{null}"
+                                            itemLabel="#{msgs.pleaseSelect}" />
+                                        <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
+                                        <f:ajax
+                                            execute="@this"
+                                            render="headerAssignment" />
+                                    </h:selectOneMenu>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msgs.plugin_workflow_excel_metadata_import_replaceExistingData}" />
+                                    </f:facet>
+                                    <h:selectOneRadio
+                                        value="#{column.replaceExistingData}"
+                                        styleClass="select-radio select-radio-horizontal">
+                                        <f:selectItem
+                                            itemValue="#{false}"
+                                            itemLabel="#{msgs.plugin_workflow_excel_metadata_import_add}" />
+                                        <f:selectItem
+                                            itemValue="#{true}"
+                                            itemLabel="#{msgs.plugin_workflow_excel_metadata_import_replace}" />
+                                        <f:ajax
+                                            execute="@this"
+                                            render="headerAssignment" />
+                                    </h:selectOneRadio>
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </div>
+                </ui:fragment>
+
+                <div class="box__actions">
+                    <h:commandLink
+                        rendered="#{NavigationForm.workflowPlugin.excelFile != null}"
+                        styleClass="btn btn-blank"
+                        action="#{NavigationForm.workflowPlugin.cancelUpload()}">
+                        <h:outputText value="#{msgs.abbrechen}" />
+                        <f:ajax execute="@this" render="mainForm" />
+                    </h:commandLink>
+                    <h:commandLink
+                        rendered="#{NavigationForm.workflowPlugin.headerOrder.size() gt 0}"
+                        styleClass="btn btn-primary"
+                        action="#{NavigationForm.workflowPlugin.importData}">
+                        <h:outputText value="#{msgs.plugin_workflow_excel_metadata_import_startImport}" />
+                    </h:commandLink>
+                </div>
+
+            </h:form>
+        </intranda:box>
+    </util:missing-rights>
 </ui:composition>
