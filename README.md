@@ -1,6 +1,6 @@
 # Goobi workflow Plugin: goobi-plugin-workflow-excel-metadata-import
 
-<img src="https://goobi.io/wp-content/uploads/logo_goobi_plugin.png" align="right" style="margin:0 0 20px 20px;" alt="Plugin for Goobi workflow" width="175" height="109">
+<img src="https://commons.wikimedia.org/wiki/File:Logo_goobi_workflow_v7.png" align="right" style="margin:0 0 20px 20px;" alt="Plugin for Goobi workflow" width="175" height="109">
 
 Import top level metadata from excel file
 
