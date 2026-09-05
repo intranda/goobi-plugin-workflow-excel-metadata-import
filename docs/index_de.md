@@ -1,8 +1,8 @@
 ---
-title: Excel Metadaten Import
+title: Excel-Metadaten-Import
 identifier: intranda_workflow_excel_metadata_import
 description: Workflow Plugin zum Importieren von Metadaten aus einer Excel-Datei in bestehende Goobi-Vorgänge
-published: false
+published: true
 keywords:
     - Goobi workflow
     - Plugin
@@ -42,7 +42,7 @@ Wenn das Plugin korrekt installiert und konfiguriert wurde, ist es innerhalb des
 
 **1. Excel-Datei hochladen**
 
-Im oberen Bereich der Oberfläche befindet sich eine Upload-Komponente. Die Datei kann per Drag & Drop oder über den Dateiauswahl-Dialog übergeben werden. Unterstützte Formate sind `.xlsx` und `.xls`.
+Im oberen Bereich der Oberfläche befindet sich eine Upload-Komponente. Die Datei kann per Drag & Drop oder über den Dateiauswahldialog übergeben werden. Unterstützte Formate sind `.xlsx` und `.xls`. Eine Beispieldatei zum Testen liegt unter [metadata.xlsx](metadata.xlsx).
 
 **2. Analyse der Kopfzeile**
 
@@ -52,39 +52,33 @@ Nach dem Upload liest das Plugin die erste Zeile der Tabelle als Kopfzeile ein. 
 - Wird eine passende **Titel-Spalte** gefunden, wird der Vorgang über den exakten Vorgangstitel gesucht.
 - Wird **keine** passende Spalte gefunden, bricht das Plugin mit einer Fehlermeldung ab.
 
-Die ID- bzw. Titel-Spalte wird aus der Mapping-Tabelle herausgenommen und dient ausschließlich zur Identifikation des Vorgangs.
+Sind sowohl eine ID- als auch eine Titel-Spalte vorhanden, wird ausschließlich die ID-Spalte zur Identifikation verwendet. Beide Spalten werden in der Zuordnungstabelle nicht angezeigt und dienen nur der Identifikation des Vorgangs.
+
+Außerdem wird bereits beim Upload der Vorgang der ersten Datenzeile geladen, da aus dessen Regelsatz die auswählbaren Metadatenfelder stammen. Existiert dieser Vorgang nicht, bricht das Plugin ebenfalls mit einer Fehlermeldung ab.
 
 **3. Spaltenzuordnung**
 
 Alle übrigen Spalten werden in einer Tabelle dargestellt. Für jede Spalte kann über ein Dropdown-Menü ein Metadatenfeld aus dem Regelsatz des ersten gefundenen Vorgangs ausgewählt werden. Das Plugin versucht dabei, Spaltenname und Metadatenbezeichnung automatisch zuzuordnen (Vergleich mit internem Namen sowie deutscher und englischer Bezeichnung).
 
-Zusätzlich kann pro Spalte über Radio-Buttons festgelegt werden, ob vorhandene Metadaten desselben Typs **ergänzt** oder **ersetzt** werden sollen.
+Zusätzlich kann pro Spalte über Radio-Buttons festgelegt werden, ob vorhandene Metadaten desselben Typs **ergänzt** oder **ersetzt** werden sollen. Spalten, denen kein Metadatenfeld zugeordnet ist, werden beim Import ignoriert.
 
 **4. Import starten**
 
-Über den Import-Button werden alle Datenzeilen verarbeitet. Für jede Zeile wird der Vorgang geladen, die konfigurierten Metadaten geschrieben und die Metadaten-Datei gespeichert. Zeilen ohne Identifikationswert werden übersprungen. Am Ende wird eine Zusammenfassung mit Erfolgs- und Fehlerzähler angezeigt.
+Über den Import-Button werden alle Datenzeilen verarbeitet. Für jede Zeile wird der Vorgang geladen, die zugeordneten Metadaten geschrieben und die Metadaten-Datei gespeichert. Zeilen ohne Identifikationswert werden übersprungen; Zeilen, deren Vorgang nicht gefunden wird oder bei denen ein Fehler auftritt, werden als Fehler gezählt, der Import läuft mit der nächsten Zeile weiter. Am Ende wird eine Zusammenfassung mit der Anzahl der erfolgreich und der fehlerhaft importierten Zeilen angezeigt.
+
+Beim Schreiben der Metadaten gelten folgende Regeln:
+
+- Die Metadaten werden in das oberste logische Strukturelement des Vorgangs geschrieben. Bei mehrbändigen Werken (Anchor) wird das erste untergeordnete Strukturelement verwendet.
+- Leere Zellen werden übersprungen. Das gilt auch im Modus **ersetzen**: Vorhandene Metadaten werden nur dann entfernt, wenn die Zelle einen Wert enthält.
+- Bei **Personen** wird der Zellwert in Vor- und Nachname zerlegt: Enthält der Wert ein Komma, gilt die Form `Nachname, Vorname` (Trennung am letzten Komma). Enthält er kein Komma, aber ein Leerzeichen, gilt die Form `Vorname Nachname` (Trennung am letzten Leerzeichen). Ein Wert ohne Komma und Leerzeichen wird als Vorname übernommen.
+- Bei **Körperschaften** wird der Zellwert als Hauptname übernommen.
+- Alle anderen Metadatentypen erhalten den Zellwert unverändert als Wert.
 
 
 ## Konfiguration
 Die Konfiguration des Plugins erfolgt in der Datei `plugin_intranda_workflow_excel_metadata_import.xml` wie hier aufgezeigt:
 
-```xml
-<config_plugin>
-
-    <!-- possible names for the process id column -->
-    <processIdField>VorgangsID</processIdField>
-    <processIdField>Vorgang-ID</processIdField>
-    <processIdField>ID</processIdField>
-    <processIdField>Processid</processIdField>
-
-    <!-- possible names for the process title column -->
-    <processTitleField>Vorgangstitel</processTitleField>
-    <processTitleField>process title</processTitleField>
-    <processTitleField>processtitle</processTitleField>
-    <processTitleField>Title</processTitleField>
-
-</config_plugin>
-```
+{{CONFIG_CONTENT}}
 
 Die folgende Tabelle enthält eine Zusammenstellung der Parameter und ihrer Beschreibungen:
 
