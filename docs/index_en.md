@@ -40,11 +40,11 @@ If the plugin has been installed and configured correctly, it can be found under
 
 ### Procedure
 
-**1. Upload the Excel file**
+##### 1. Upload the Excel file
 
 The upper section of the interface contains an upload component. The file can be provided via drag & drop or through the file selection dialog. Supported formats are `.xlsx` and `.xls`. A sample file for testing is available at [metadata.xlsx](metadata.xlsx).
 
-**2. Header row analysis**
+#### 2. Header row analysis
 
 After uploading, the plugin reads the first row of the spreadsheet as the header row. It checks whether at least one column matches one of the configured values from `processIdField` or `processTitleField` (case-insensitive comparison).
 
@@ -56,13 +56,15 @@ If both an ID column and a title column are present, only the ID column is used 
 
 In addition, the process of the first data row is already loaded during upload, as the selectable metadata fields are taken from its ruleset. If this process does not exist, the plugin also aborts with an error message.
 
-**3. Column mapping**
+#### 3. Column mapping
 
 All remaining columns are displayed in a table. For each column, a metadata field from the ruleset of the first matched process can be selected via a dropdown menu. The plugin attempts to automatically assign a metadata field by comparing the column name with the internal name as well as the German and English labels of each metadata type.
 
 Additionally, radio buttons on each row allow you to specify whether existing metadata of the same type should be **added to** or **replaced**. Columns without an assigned metadata field are ignored during import.
 
-**4. Start the import**
+![Column mapping](screen4_en.png)
+
+#### 4. Start the import
 
 Clicking the import button processes all data rows. For each row the process is loaded, the mapped metadata is written, and the metadata file is saved. Rows without an identification value are skipped; rows whose process cannot be found or which cause an error are counted as errors, and the import continues with the next row. At the end, a summary showing the number of successfully and unsuccessfully imported rows is displayed.
 

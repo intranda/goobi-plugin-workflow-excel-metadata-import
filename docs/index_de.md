@@ -40,11 +40,11 @@ Wenn das Plugin korrekt installiert und konfiguriert wurde, ist es innerhalb des
 
 ### Ablauf
 
-**1. Excel-Datei hochladen**
+#### 1. Excel-Datei hochladen
 
 Im oberen Bereich der Oberfläche befindet sich eine Upload-Komponente. Die Datei kann per Drag & Drop oder über den Dateiauswahldialog übergeben werden. Unterstützte Formate sind `.xlsx` und `.xls`. Eine Beispieldatei zum Testen liegt unter [metadata.xlsx](metadata.xlsx).
 
-**2. Analyse der Kopfzeile**
+#### 2. Analyse der Kopfzeile
 
 Nach dem Upload liest das Plugin die erste Zeile der Tabelle als Kopfzeile ein. Dabei wird geprüft, ob mindestens eine Spalte einem der konfigurierten Werte aus `processIdField` oder `processTitleField` entspricht (Groß-/Kleinschreibung wird ignoriert).
 
@@ -56,13 +56,15 @@ Sind sowohl eine ID- als auch eine Titel-Spalte vorhanden, wird ausschließlich 
 
 Außerdem wird bereits beim Upload der Vorgang der ersten Datenzeile geladen, da aus dessen Regelsatz die auswählbaren Metadatenfelder stammen. Existiert dieser Vorgang nicht, bricht das Plugin ebenfalls mit einer Fehlermeldung ab.
 
-**3. Spaltenzuordnung**
+#### 3. Spaltenzuordnung
 
 Alle übrigen Spalten werden in einer Tabelle dargestellt. Für jede Spalte kann über ein Dropdown-Menü ein Metadatenfeld aus dem Regelsatz des ersten gefundenen Vorgangs ausgewählt werden. Das Plugin versucht dabei, Spaltenname und Metadatenbezeichnung automatisch zuzuordnen (Vergleich mit internem Namen sowie deutscher und englischer Bezeichnung).
 
 Zusätzlich kann pro Spalte über Radio-Buttons festgelegt werden, ob vorhandene Metadaten desselben Typs **ergänzt** oder **ersetzt** werden sollen. Spalten, denen kein Metadatenfeld zugeordnet ist, werden beim Import ignoriert.
 
-**4. Import starten**
+![Spaltenzuordnung](screen4_de.png)
+
+#### 4. Import starten
 
 Über den Import-Button werden alle Datenzeilen verarbeitet. Für jede Zeile wird der Vorgang geladen, die zugeordneten Metadaten geschrieben und die Metadaten-Datei gespeichert. Zeilen ohne Identifikationswert werden übersprungen; Zeilen, deren Vorgang nicht gefunden wird oder bei denen ein Fehler auftritt, werden als Fehler gezählt, der Import läuft mit der nächsten Zeile weiter. Am Ende wird eine Zusammenfassung mit der Anzahl der erfolgreich und der fehlerhaft importierten Zeilen angezeigt.
 

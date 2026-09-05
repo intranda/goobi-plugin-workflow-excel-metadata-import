@@ -7,7 +7,10 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
     xmlns:util="http://goobi.io/util">
-    <util:missing-rights rights="Plugin_workflow_excel_metadata_import">
+    <util:missing-rights rights="Plugin_workflow_excel_metadata_import" />
+    <h:panelGroup
+        layout="block"
+        rendered="#{LoginForm.hasRole('Plugin_workflow_excel_metadata_import')}">
         <intranda:box
             id="uploadBox"
             boxType="action"
@@ -128,5 +131,5 @@
 
             </h:form>
         </intranda:box>
-    </util:missing-rights>
+    </h:panelGroup>
 </ui:composition>
